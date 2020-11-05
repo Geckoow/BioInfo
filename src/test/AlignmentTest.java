@@ -31,7 +31,9 @@ public class AlignmentTest {
     }
     @Test
     public void alignTest(){
-        alignment.generateAlignment();
+        System.out.println(alignment.gfAlignment());
+        System.out.println(alignment.alignF.toString());
+        System.out.println(alignment.alignG.toString());
         assertEquals("CAGCA-CTTGGATTCTCGG", alignment.alignF.toString());
         assertEquals("---CAGCGTGG--------", alignment.alignG.toString());
     }
