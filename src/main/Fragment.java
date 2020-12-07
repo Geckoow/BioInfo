@@ -3,13 +3,12 @@ package main;
 import java.util.LinkedList;
 
 public class Fragment {
-    public LinkedList<Character> list;
+    public char[] list;
 
     /**
      * Empty fragment
      */
     public Fragment(){
-        list = new LinkedList<>();
     }
 
     /**
@@ -17,12 +16,12 @@ public class Fragment {
      * @param s the sequence
      */
     public Fragment(String s){
-                list = new LinkedList();
+                list = new char[s.length()];
                 for (int i = 0; i < s.length(); i++){
-                    list.add(s.charAt(i));
+                    list[i] = (s.charAt(i));
                 }
     }
-    public Fragment(LinkedList l){
+    public Fragment(char[] l){
         list = l;
     }
 
@@ -31,7 +30,7 @@ public class Fragment {
      * @param c the given char
      * @return the corresponding int
      */
-    public int getCharValue(char c) {
+    public byte getCharValue(char c) {
         switch (c) {
             case '-':
                 return 0;
@@ -52,7 +51,7 @@ public class Fragment {
      * @param i the given int
      * @return the corresponding char
      */
-    public char getCharFromValue(int i){
+    public char getCharFromValue(byte i){
         switch (i) {
             case 0:
                 return '-';
@@ -75,7 +74,7 @@ public class Fragment {
      * @return the complement of c
      */
     public char getCharComplementary(char c){
-        int comp = -getCharValue(c);
+        byte comp = (byte) -getCharValue(c);
         return getCharFromValue(comp);
     }
 
@@ -84,20 +83,23 @@ public class Fragment {
      * @return an inverted complemenrary Fragment
      */
     public Fragment getComplementary(){
-        LinkedList comp = new LinkedList();
-        for(int i = list.size()-1; i > -1; i--){
-            comp.add(getCharComplementary(list.get(i)));
+        char[] comp = new char[list.length];
+        for(int i = list.length-1; i > -1; i--){
+            comp[i] = (getCharComplementary(list[i]));
         }
-        return new Fragment(comp);
+        Fragment complement = new Fragment(comp);
+        complement.invert();
+        return complement;
     }
 
     /**
      * Invert a fragment acgt -> tgca
      */
     public void invert(){
-        LinkedList invert = new LinkedList();
-        for(int i = list.size()-1; i > -1; i--){
-            invert.add(list.get(i));
+        char[] invert = new char[list.length];
+        int invIndex = list.length-1;
+        for(int i = 0; i < list.length; i++){
+            invert[invIndex-i] = list[i];
         }
         list = invert;
     }
@@ -108,7 +110,7 @@ public class Fragment {
      * @return the char at index i
      */
     public char getCharAtIndex(int i){
-        return list.get(i);
+        return list[i];
     }
 
     /**
@@ -116,7 +118,7 @@ public class Fragment {
      * @return the size of the fragment
      */
     public int getSize(){
-        return list.size();
+        return list.length;
     }
 
     /**
@@ -125,8 +127,8 @@ public class Fragment {
      */
     public String toString(){
         String frag = "";
-        for(int i = 0; i < list.size(); i++){
-            frag += list.get(i);
+        for(int i = 0; i < list.length; i++){
+            frag += list[i];
         }
         return frag;
     }

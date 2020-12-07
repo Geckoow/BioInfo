@@ -3,16 +3,16 @@ package main;
 public class SemiGlobAlignment {
     private final Fragment f;
     private final Fragment g;
-    private final int width;
-    private final int height;
+    private final byte width;
+    private final byte height;
     public final Fragment alignF;
     public final Fragment alignG;
 
-    public int[][] matrix;
+    public byte[][] matrix;
 
-    private final int GAP = -2;
-    private final int MATCH = 1;
-    private final int MISSMATCH = -1;
+    private final byte GAP = -2;
+    private final byte MATCH = 1;
+    private final byte MISSMATCH = -1;
 
     /**
      * Generate a semi global alignment between two fragments
@@ -22,13 +22,13 @@ public class SemiGlobAlignment {
     public SemiGlobAlignment(Fragment f, Fragment g){
         this.f = f;
         this.g = g;
-        this.alignF = new Fragment();
-        this.alignG = new Fragment();
+        this.alignF = new Fragment(new char[20]);
+        this.alignG = new Fragment(new char[20]);
 
-        this.width = f.getSize() + 1;
-        this.height = g.getSize() + 1;
+        this.width = (byte) (f.getSize() + 1);
+        this.height = (byte) (g.getSize() + 1);
 
-        matrix = new int[width][height];
+        matrix = new byte[width][height];
 
         instantiateMatrix();
     }
@@ -40,8 +40,8 @@ public class SemiGlobAlignment {
         initCol();
         initRows();
 
-        for(int i = 1; i < width; i++){
-            for(int j = 1; j < height; j++){
+        for(byte i = 1; i < width; i++){
+            for(byte j = 1; j < height; j++){
                 sim(i, j);
             }
         }
@@ -51,7 +51,7 @@ public class SemiGlobAlignment {
      * Fill the first row with 0
      */
     public void initRows(){
-        for(int i = 0; i < width; i++){
+        for(byte i = 0; i < width; i++){
             matrix[i][0] = 0;
         }
     }
@@ -60,7 +60,7 @@ public class SemiGlobAlignment {
      * Fill the first column with 0
      */
     public void initCol(){
-        for(int i = 0; i < height; i++){
+        for(byte i = 0; i < height; i++){
             matrix[0][i] = 0;
         }
     }
@@ -70,12 +70,12 @@ public class SemiGlobAlignment {
      * @param i index of the row
      * @param j index of the column
      */
-    public void sim(int i, int j){
-        int score = matrix[i-1][j-1] + matching(i, j);
+    public void sim(byte i, byte j){
+        byte score = (byte) (matrix[i-1][j-1] + matching(i, j));
         if(matrix[i-1][j] + GAP > score)
-            score = matrix[i-1][j] + GAP;
+            score = (byte) (matrix[i-1][j] + GAP);
         if(matrix[i][j-1] + GAP > score)
-            score = matrix[i][j-1] + GAP;
+            score = (byte) (matrix[i][j-1] + GAP);
         matrix[i][j] = score;
     }
 
@@ -85,7 +85,7 @@ public class SemiGlobAlignment {
      * @param j index of the second nucleotide
      * @return match or missmatch
      */
-    public int matching(int i, int j){
+    public byte matching(byte i, byte j){
         char fChar = f.getCharAtIndex(i-1);
         char gChar = g.getCharAtIndex(j-1);
         if (fChar == gChar)
@@ -98,10 +98,10 @@ public class SemiGlobAlignment {
      * Return the row index of the maximum score in the last column of the matrix
      * @return the max score in the last column
      */
-    public int getIndexMaxLastCol(){
-        int max = matrix[0][height-1];
-        int index = 0;
-        for(int i = 1; i < width; i++){
+    public byte getIndexMaxLastCol(){
+        byte max = matrix[0][height-1];
+        byte index = 0;
+        for(byte i = 1; i < width; i++){
             if(matrix[i][height-1] > max) {
                 max = matrix[i][height-1];
                 index = i;
@@ -113,10 +113,10 @@ public class SemiGlobAlignment {
      * Return the row index of the maximum score in the last row of the matrix
      * @return the max score in the last row
      */
-    public int getIndexMaxLastRow(){
-        int max = matrix[width-1][0];
-        int index = 0;
-        for(int i = 1; i < height; i++){
+    public byte getIndexMaxLastRow(){
+        byte max = matrix[width-1][0];
+        byte index = 0;
+        for(byte i = 1; i < height; i++){
             if(matrix[width-1][i] > max) {
                 max = matrix[width-1][i];
                 index = i;
@@ -130,8 +130,8 @@ public class SemiGlobAlignment {
      * @param j index of column
      * @return true if the match comes from the upper row, false either
      */
-    public boolean upMatch(int i, int j){
-        int currentScore = matrix[i][j];
+    public boolean upMatch(byte i, byte j){
+        byte currentScore = matrix[i][j];
         return currentScore == matrix[i-1][j] + GAP;
     }
     /**
@@ -140,8 +140,8 @@ public class SemiGlobAlignment {
      * @param j index of column
      * @return true if the match comes from the left column, false either
      */
-    public boolean leftMatch(int i, int j){
-        int currentScore = matrix[i][j];
+    public boolean leftMatch(byte i, byte j){
+        byte currentScore = matrix[i][j];
         return currentScore == matrix[i][j-1] + GAP;
     }
     /**
@@ -150,26 +150,26 @@ public class SemiGlobAlignment {
      * @param j index of column
      * @return true if the match comes from the diag, false either
      */
-    public boolean diagMatch(int i, int j){
-        int currentScore = matrix[i][j];
+    public boolean diagMatch(byte i, byte j){
+        byte currentScore = matrix[i][j];
         return currentScore == matrix[i-1][j-1] + matching(i, j);
     }
 
     /**
      * Start filling the alignment with the start of the biggest fragment and gap for the small one
      */
-    public void startAlign(){
-        for(int i = f.getSize()-1; i >= getIndexMaxLastCol(); i--){
+    /*public void startAlign(){
+        for(byte i = f.getSize()-1; i >= getIndexMaxLastCol(); i--){
             alignF.list.add(f.getCharAtIndex(i));
             alignG.list.add('-');
         }
-    }
+    }*/
 
-    /**
+    /*/**
      * Complete the alignment with the rest of the fragment or gap
      * @param index index in the fragment
      */
-    public void fillAlign(int index){
+    /*public void fillAlign(byte index){
         if(index > 0){
             while (index-1 > -1){
                 alignF.list.add(f.getCharAtIndex(index-1));
@@ -179,10 +179,10 @@ public class SemiGlobAlignment {
         }
         alignF.invert();
         alignG.invert();
-    }
-    public int fgAligment(){
+    }*/
+    public byte fgAligment(){
         if(getIndexMaxLastCol() != 0) {
-            int include = generateAlignment(getIndexMaxLastCol(), height - 1, f, g, true);
+            byte include = generateAlignment(getIndexMaxLastCol(), (byte) (height - 1), f, g, true);
             if(include > 0)
                 return matrix[getIndexMaxLastCol()][height-1];
             else
@@ -191,9 +191,9 @@ public class SemiGlobAlignment {
         else
             return 0;
     }
-    public int gfAlignment(){
+    public byte gfAlignment(){
         if(getIndexMaxLastRow() != 0) {
-            int include = generateAlignment(width-1, getIndexMaxLastRow(), f, g, false);
+            byte include = generateAlignment((byte) (width-1), getIndexMaxLastRow(), f, g, false);
             if(include > 0)
                 return matrix[width-1][getIndexMaxLastRow()];
             else
@@ -205,30 +205,32 @@ public class SemiGlobAlignment {
     /**
      * Generate the alignment between the two fragments of the constructor and store them in the alignments frags
      */
-    public int generateAlignment(int i, int j, Fragment f, Fragment g, boolean leftToRight){
+    public byte generateAlignment(byte i, byte j, Fragment f, Fragment g, boolean leftToRight){
 
         //startAlign();
-        int interScore = matrix[i][j];
+        byte byteerScore = matrix[i][j];
+        byte index = 0;
 
         while (i > 0 && j > 0){
-            int fIndex = i -1;
-            int gIndex = j -1;
+            byte fIndex = (byte) (i -1);
+            byte gIndex = (byte) (j -1);
             if(diagMatch(i, j)){
-                alignF.list.add(f.getCharAtIndex(fIndex));
-                alignG.list.add(g.getCharAtIndex(gIndex));
+                alignF.list[index] = f.getCharAtIndex(fIndex);
+                alignG.list[index] = g.getCharAtIndex(gIndex);
                 i--;
                 j--;
             }
             else if(upMatch(i, j)){
-                alignF.list.add(f.getCharAtIndex(fIndex));
-                alignG.list.add('-');
+                alignF.list[index] = f.getCharAtIndex(fIndex);
+                alignG.list[index] = '-';
                 i--;
             }
             else if(leftMatch(i, j)){
-                alignF.list.add('-');
-                alignG.list.add(g.getCharAtIndex(gIndex));
+                alignF.list[index] = '-';
+                alignG.list[index] = g.getCharAtIndex(gIndex);
                 j--;
             }
+            index++;
         }
         //fillAlign(i);
         alignF.invert();
@@ -237,5 +239,19 @@ public class SemiGlobAlignment {
             return j;
         else
             return i;
+    }
+    /**
+     * the score of the global alignment from f to g
+     * @return
+     */
+    public int getScore() {
+        return matrix[width-1][getIndexMaxLastCol()];
+    }
+    /**
+     * the score of the global alignment from g to f
+     * @return
+     */
+    public int getScoreTransposed() {
+        return matrix[getIndexMaxLastRow()][height-1];
     }
 }
