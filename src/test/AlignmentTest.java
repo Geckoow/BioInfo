@@ -11,8 +11,8 @@ public class AlignmentTest {
     /**
      * Test based on semi-global alignment of course pg63
      */
-    Fragment f = new Fragment("CAGCACTTGGATTCTCGG");
-    Fragment g = new Fragment("CAGCGTGG");
+    Fragment f = new Fragment("cagcacttggattctcgg");
+    Fragment g = new Fragment("cagcgtgg");
     SemiGlobAlignment alignment;
 
     @Before
@@ -31,10 +31,11 @@ public class AlignmentTest {
     }
     @Test
     public void alignTest(){
-        System.out.println(alignment.gfAlignment());
-        System.out.println(alignment.alignF.toString());
-        System.out.println(alignment.alignG.toString());
-        assertEquals("CAGCA-CTTGGATTCTCGG", alignment.alignF.toString());
-        assertEquals("---CAGCGTGG--------", alignment.alignG.toString());
+        //System.out.println(alignment.fgAligment());
+        alignment.generateAlignment();
+        System.out.println(alignment.fAlign.toString());
+        System.out.println(alignment.gAlign.toString());
+        assertEquals("cagca-cttggattctcgg", alignment.fAlign.toString());
+        assertEquals("---cagcgtgg--------", alignment.gAlign.toString());
     }
 }

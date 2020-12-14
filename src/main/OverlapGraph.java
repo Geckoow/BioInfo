@@ -29,7 +29,7 @@ public class OverlapGraph {
     /**
      * generates the 8 arc possibilities
      * @param startP index of the arc source node
-     * @param endPoint index of the destination node of the arc
+     * @param endP index of the destination node of the arc
      */
     public void generateArc(int startP, int endP) {
         Fragment f = fragments.get(startP);

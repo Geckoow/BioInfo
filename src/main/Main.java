@@ -4,6 +4,7 @@ public class Main {
     public static void main(String[] args) {
         Fragment f = new Fragment("cagcacttggattctcgg");
         Fragment g = new Fragment("cagcgtgg");
+
         SemiGlobAlignment alignment = new SemiGlobAlignment(f, g);
 
         for(int i = 0; i < alignment.matrix.length; i++){
