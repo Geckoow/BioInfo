@@ -13,7 +13,6 @@ public class FragmentTest {
     public void testComp(){
         Fragment comp = f.getComplementary();
         assertEquals(g.toString(), comp.toString());
-        f.invert();
-        assertEquals("tg-gcta-" ,f.toString());
     }
+    
 }

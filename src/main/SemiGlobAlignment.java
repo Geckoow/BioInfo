@@ -6,16 +6,14 @@ import java.util.LinkedList;
 public class SemiGlobAlignment {
     private final Fragment f;
     private final Fragment g;
-    public  LinkedList<Byte> alignF;
     public final LinkedList<Byte> alignG;
-    public Fragment fAlign;
-    public Fragment gAlign;
+    public final LinkedList<Byte> alignF;
     /**
-     * 1 + size of f
+     * 1 + size of f 
      */
     private int width;
     /**
-     * 1 + size of g
+     * 1 + size of g 
      */
     private int height;
 
@@ -26,13 +24,13 @@ public class SemiGlobAlignment {
     private final short MISSMATCH = -1;
 
     public SemiGlobAlignment(Fragment f, Fragment g){
-        this.f = f;
-        this.g = g;
-        this.alignF = new LinkedList<Byte>();
+        this.f = g;         // adaptation de l'implematation pour 
+        this.g = f;			// obternir l'alignement f->G pour (f,g)s
         this.alignG = new LinkedList<Byte>();
+        this.alignF = new LinkedList<Byte>();
 
-        this.width = f.getSize() + 1;
-        this.height = g.getSize() + 1;
+        this.width = g.getSize() + 1;
+        this.height = f.getSize() + 1;
 
         matrix = new int[width][height];
 
@@ -76,7 +74,10 @@ public class SemiGlobAlignment {
         else
             return MISSMATCH;
     }
-
+    /**
+     * 
+     * @return the index of the row with the highest score on the last column
+     */
     public int getIndexMaxLastCol(){
         int max = matrix[0][height-1];
         int index = 0;
@@ -88,7 +89,11 @@ public class SemiGlobAlignment {
         }
         return index;
     }
-
+    
+    /**
+     * 
+     * @return the index of the column with the highest score on the last row
+     */
     public int getIndexMaxLastLine(){
         int max = matrix[width-1][0];
         int index = 0;
@@ -116,19 +121,19 @@ public class SemiGlobAlignment {
         return currentScore == matrix[i-1][j-1] + matching(i, j);
     }
     public void startAlign(){
-        int iMax = getIndexMaxLastCol();
-        for(int i = f.getSize()-1; i >= iMax; i--){
-            alignF.addFirst(f.getByteAtIndex(i));
-            alignG.addFirst((byte) 0);  //'-'
+    	int iMax = getIndexMaxLastCol();
+    	for(int i = f.getSize()-1; i >= iMax; i--){
+        	alignG.addFirst(f.getByteAtIndex(i));
+            alignF.addFirst((byte) 0);  //'-'
         }
     }
     public void fillAlignF(int index){
 
         if(index > 0){
             while (index-1 > -1){
-                alignF.addFirst(f.getByteAtIndex(index-1));
-                alignG.addFirst((byte) 0);  // '-'
-                index--;
+            	 alignG.addFirst(f.getByteAtIndex(index-1));
+                 alignF.addFirst((byte) 0);  // '-'
+                 index--;
             }
         }
     }
@@ -136,13 +141,13 @@ public class SemiGlobAlignment {
 
         if(index > 0){
             while (index-1 > -1){
-                alignG.addFirst(g.getByteAtIndex(index-1));
-                alignF.addFirst((byte) 0);  // '-'
-                index--;
+            	 alignF.addFirst(g.getByteAtIndex(index-1));
+                 alignG.addFirst((byte) 0);  // '-'
+                 index--;
             }
         }
     }
-    public void generateAlignment(){
+    public void generateAlignment(){  //f->g
 
         startAlign();
 
@@ -153,42 +158,41 @@ public class SemiGlobAlignment {
             int fIndex = i -1;
             int gIndex = j -1;
             if(diagMatch(i, j)){
-                alignF.addFirst(f.getByteAtIndex(fIndex));
-                alignG.addFirst(g.getByteAtIndex(gIndex));
+            	alignG.addFirst(f.getByteAtIndex(fIndex));
+            	alignF.addFirst(g.getByteAtIndex(gIndex));
                 i--;
                 j--;
             }
             else if(upMatch(i, j)){
-                alignF.addFirst(f.getByteAtIndex(fIndex));
-                alignG.addFirst((byte) 0);
+            	alignG.addFirst(f.getByteAtIndex(fIndex));
+            	alignF.addFirst((byte) 0);
                 i--;
             }
             else if(leftMatch(i, j)){
-                alignF.addFirst((byte) 0);
-                alignG.addFirst(g.getByteAtIndex(gIndex));
+            	alignG.addFirst((byte) 0);
+            	alignF.addFirst(g.getByteAtIndex(gIndex));
                 j--;
             }
         }
         if (i>0)
-            fillAlignF(i);
+        	fillAlignF(i);
         else
-            fillAlignG(j);
-        fAlign = new Fragment(alignF);
-        gAlign = new Fragment(alignG);
+        	fillAlignG(j);
     }
     /**
      * the score of the global alignment from f to g
      * @return
      */
     public int getScore() {
-        return matrix[width-1][getIndexMaxLastCol()];
+    	//System.out.println(matrix[0].length);
+    	return matrix[getIndexMaxLastCol()][height-1];
     }
     /**
      * the score of the global alignment from g to f
      * @return
      */
     public int getScoreTransposed() {
-        return matrix[getIndexMaxLastLine()][height-1];
+    	return matrix[width-1][getIndexMaxLastLine()];
     }
-
+    	
 }

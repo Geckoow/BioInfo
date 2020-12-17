@@ -17,7 +17,7 @@ public class FileManager {
 			String line, frag = "";
 			BufferedReader in = new BufferedReader(new FileReader(file));
 			line = in.readLine();
-			char colNum = line.charAt(-1);
+			char colNum = line.charAt(line.length()-1);
 			this.idCollection = Short.parseShort(""+colNum);
 			while((line = in.readLine()) != null) {
 				if(line.startsWith(">") || line.equals("")) {
