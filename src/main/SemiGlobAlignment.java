@@ -8,10 +8,12 @@ public class SemiGlobAlignment {
     private final Fragment g;
     public final LinkedList<Byte> alignG;
     public final LinkedList<Byte> alignF;
+  
     /**
      * 1 + size of f 
      */
     private int width;
+   
     /**
      * 1 + size of g 
      */

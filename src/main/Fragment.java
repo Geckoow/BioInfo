@@ -1,11 +1,14 @@
 package main;
 
+import java.util.Iterator;
+
 public class Fragment {
 	/**
 	 * The byte array materializing the fragment
 	 */
     private byte[] list;
     
+
     /**
      * true if this fragment is the inverse fragment of another
      */
@@ -15,19 +18,18 @@ public class Fragment {
       */
     private boolean isComplementary = false;
     /**
-     * 
+     *  true if this fragment is the complementary and inverse fragment of another
      */
-    private int startOffset = 0;
-    /**
-     * 
-     */
-    private int endOffset = 0;
+    private boolean isComplementaryInverse = false;
+
+
     
     
     public Fragment(byte[] l){
         this.list = l;
     }
-    
+
+ 
     public Fragment(String s){
     	list = new byte[s.length()];
     	for (int i = 0; i < s.length(); i++){
@@ -35,7 +37,18 @@ public class Fragment {
     	}
     }
 
+
   
+	public Fragment(LinkedFragment linkedFragment) {
+		list = new byte[linkedFragment.size()];
+		Iterator<Byte> iter = linkedFragment.listIterator();
+		int size = linkedFragment.getStartOffset() + linkedFragment.getInnerList().size();
+		for(int i = linkedFragment.getStartOffset();i<size ;i++) {
+			list[i] = (byte)iter.next();
+		}
+	}
+
+
 	/**
 	 * method that converts a char to a byte.
 	 * @param c char to convert
@@ -95,22 +108,32 @@ public class Fragment {
      */
     public Fragment getComplementary(){
         byte[] comp = new byte[list.length];
-        int listSize = list.length-1;
-        for(int i = list.length-1; i > -1; i--){
-        	comp[listSize -i] = getCharComplementary(list[i]);
+        
+        for(int i = 0 ; i < list.length; i++){
+        	comp[i] = getCharComplementary(list[i]);
         }
         return new Fragment(comp);
+    }
+    
+    /**
+     * method which returns the complement of this Fragment
+     * @return complementary of this fragments
+     */
+    public Fragment getComplementaryInverse(){
+    	
+        return  getComplementary().invert() ;
+
     }
     /**
      * reverse this fragment
      */
-    public void invert(){
+    public Fragment invert(){
     	byte[] invert = new byte[list.length];
     	int listSize = list.length-1;
         for(int i = list.length-1; i > -1; i--){
         	invert[listSize-i] = list[i];
         }
-        list = invert;
+        return  new Fragment(invert);
     }
     
     public byte getByteAtIndex(int i){
@@ -145,21 +168,14 @@ public class Fragment {
 		this.isComplementary = isComplementary;
 	}
 
-	public int getStartOffset() {
-		return startOffset;
+	
+
+	public boolean isComplementaryInverse() {
+		return isComplementaryInverse;
 	}
 
-	public void addStartOffset(int startOffset) {
-		startOffset += startOffset;
+	public void setComplementaryInverse(boolean isComplementaryInverse) {
+		this.isComplementaryInverse = isComplementaryInverse;
 	}
-
-	public int getEndOffset() {
-		return endOffset;
-	}
-
-	public void addEndOffset(int endOffset) {
-		endOffset += endOffset;
-	}
-   
     
 }
