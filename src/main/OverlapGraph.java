@@ -42,8 +42,8 @@ public class OverlapGraph {
     	SemiGlobAlignment e2 = new SemiGlobAlignment(f.getComplementary(), g);
     
     	/* weight(f->g) = weight(g'->f')*/
-    	edges.add(new Edge(startP,endP,e1.getScore(),EdgeType.FG));
-    	edges.add(new Edge(endP,startP,e1.getScore(),EdgeType.GpFp));
+    	edges.add(new Edge(startP,endP,e1.getFGScore(),EdgeType.FG));
+    	edges.add(new Edge(endP,startP,e1.getFGScore(),EdgeType.GpFp));
     	/* weight(g->f) = weight(f'->g')*/
     	edges.add(new Edge(startP,endP,e1.getScoreTransposed(),EdgeType.FpGp));
     	edges.add(new Edge(endP,startP,e1.getScoreTransposed(),EdgeType.GF));
@@ -51,8 +51,8 @@ public class OverlapGraph {
     	edges.add(new Edge(endP,startP,e2.getScoreTransposed(),EdgeType.GpF));
     	edges.add(new Edge(startP,endP,e2.getScoreTransposed(),EdgeType.FpG));
     	/* weight(g->f') = weight(f->g')*/
-    	edges.add(new Edge(endP,startP,e2.getScore(),EdgeType.GFp));
-    	edges.add(new Edge(startP,endP,e2.getScore(),EdgeType.FGp));
+    	edges.add(new Edge(endP,startP,e2.getFGScore(),EdgeType.GFp));
+    	edges.add(new Edge(startP,endP,e2.getFGScore(),EdgeType.FGp));
     }
     public PriorityBlockingQueue<Edge> getEdges() {
     	return new PriorityBlockingQueue<Edge> (edges);

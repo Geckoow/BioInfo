@@ -17,12 +17,35 @@ public class SemiGlobalAlignmentTest {
     Fragment b = new Fragment("tgcat"); 
     Fragment c = new Fragment("gcc"); 
     
-    SemiGlobAlignment gf = new SemiGlobAlignment(g,f);
+    SemiGlobAlignment fg = new SemiGlobAlignment(f,g);
 	SemiGlobAlignment ab = new SemiGlobAlignment(a,b);
 	SemiGlobAlignment bc = new SemiGlobAlignment(b,c);
 
+	  @Test
+	    public void generateAlignmentTest() 
+	    {
+	    	//CAGCA-CTTGGATTCTCGG
+	    	//   CAGCGTGG
+	    	fg.generateAlignment();
+	    	String f1 = fg.alignF.toString();
+	    	String g1 = fg.alignG.toString();
+	    	
+	    	System.out.println(fg.alignF.getStartOffset());
+	    	System.out.println(f1);
+	    	System.out.println(fg.alignF.getEndOffset());
+	    	
+	
+	    	System.out.println(fg.alignG.getStartOffset());
+	    	System.out.println(g1);
+	    	System.out.println(fg.alignG.getEndOffset());
+	    						 
+	    	assertTrue(g1.equals("cagca-cttggattctcgg"));
+	    	assertTrue(f1.equals("---cagcgtgg--------"));
+	    }
+}
+	    	
 
-    
+   /* 
     @Test
     public void generateAlignmentTest() 
     {
@@ -63,5 +86,5 @@ public class SemiGlobalAlignmentTest {
          }
     	return result;
     }
+*/
 
-}

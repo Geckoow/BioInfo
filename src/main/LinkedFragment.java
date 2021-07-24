@@ -67,16 +67,16 @@ public class LinkedFragment {
 		return startOffset;
 	}
 
-	public void addStartOffset(int startOffset) {
-		startOffset += startOffset;
+	public void addStartOffset(int values) {
+		startOffset += values;
 	}
 
 	public int getEndOffset() {
 		return endOffset;
 	}
 
-	public void addEndOffset(int endOffset) {
-		endOffset += endOffset;
+	public void addEndOffset(int values) {
+		endOffset += values;
 	}
 	/**
 	 * 

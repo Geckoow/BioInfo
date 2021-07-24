@@ -1,62 +1,65 @@
 package main;
 
 
-import java.util.LinkedList;
-
 public class SemiGlobAlignment {
     private final Fragment f;
     private final Fragment g;
-    public final LinkedList<Byte> alignG;
-    public final LinkedList<Byte> alignF;
+    public final LinkedFragment alignG;
+    public final LinkedFragment alignF;
   
     /**
-     * 1 + size of f 
+     * 1 + size of g (col)
      */
-    private int width;
+    private int _cols; 
    
     /**
-     * 1 + size of g 
+     * 1 + size of f (line)
      */
-    private int height;
+    private int _lines;
 
-    public int[][] matrix;
+    public short[][] matrix;
 
     private final short GAP = -2;
     private final short MATCH = 1;
     private final short MISSMATCH = -1;
 
     public SemiGlobAlignment(Fragment f, Fragment g){
-        this.f = g;         // adaptation de l'implematation pour 
-        this.g = f;			// obternir l'alignement f->G pour (f,g)s
-        this.alignG = new LinkedList<Byte>();
-        this.alignF = new LinkedList<Byte>();
+        this.f = f;         
+        this.g = g;			
+        this.alignG = new LinkedFragment();
+        this.alignF = new LinkedFragment();
 
-        this.width = g.getSize() + 1;
-        this.height = f.getSize() + 1;
+        this._cols = g.getSize() + 1;
+        this._lines = f.getSize() + 1;
 
-        matrix = new int[width][height];
+        matrix = new short[_lines][_cols];
 
         instantiateMatrix();
     }
+    /**
+     * builds the semi-global alignment matrix
+     */
     public void instantiateMatrix(){
         initCol();
         initRows();
 
-        for(int i = 1; i < width; i++){
-            for(int j = 1; j < height; j++){
+        for(int i = 1; i < _lines; i++)
+            for(int j = 1; j < _cols; j++)
                 sim(i, j);
-            }
-        }
     }
-    public void initRows(){
-        for(int i = 0; i < width; i++){
-            matrix[i][0] = 0;
-        }
-    }
+    /**
+     * place the zeros on the first column of the semi-global alignment matrix
+     */
     public void initCol(){
-        for(int i = 0; i < height; i++){
-            matrix[0][i] = 0;
-        }
+        for(int i = 0; i < _lines; i++)
+            matrix[i][0] = 0;
+    }
+    /**
+     * place the zeros on the first line of the semi-global alignment matrix
+     */
+    public void initRows(){
+        for(int j = 0; j < _cols; j++)
+            matrix[0][j] = 0;
     }
 
     public void sim(int i, int j){
@@ -65,7 +68,7 @@ public class SemiGlobAlignment {
             score = matrix[i-1][j] + GAP;
         if(matrix[i][j-1] + GAP > score)
             score = matrix[i][j-1] + GAP;
-        matrix[i][j] = score;
+        matrix[i][j] = (short)score;
     }
 
     public int matching(int i, int j){
@@ -81,11 +84,11 @@ public class SemiGlobAlignment {
      * @return the index of the row with the highest score on the last column
      */
     public int getIndexMaxLastCol(){
-        int max = matrix[0][height-1];
+        int max = matrix[0][_cols-1];
         int index = 0;
-        for(int i = 1; i < width; i++){
-            if(matrix[i][height-1] > max) {
-                max = matrix[i][height-1];
+        for(int i = 1; i < _lines; i++){
+            if(matrix[i][_cols-1] > max) {
+                max = matrix[i][_cols-1];
                 index = i;
             }
         }
@@ -97,11 +100,11 @@ public class SemiGlobAlignment {
      * @return the index of the column with the highest score on the last row
      */
     public int getIndexMaxLastLine(){
-        int max = matrix[width-1][0];
+        int max = matrix[_lines-1][0];
         int index = 0;
-        for(int i = 1; i < height; i++){
-            if(matrix[width-1][i] > max) {
-                max = matrix[width-1][i];
+        for(int i = 1; i < _cols; i++){
+            if(matrix[_lines-1][i] > max) {
+                max = matrix[_lines-1][i];
                 index = i;
             }
         }
@@ -123,22 +126,21 @@ public class SemiGlobAlignment {
         return currentScore == matrix[i-1][j-1] + matching(i, j);
     }
     public void startAlign(){
-    	int iMax = getIndexMaxLastCol();
-    	for(int i = f.getSize()-1; i >= iMax; i--){
-        	alignG.addFirst(f.getByteAtIndex(i));
-            alignF.addFirst((byte) 0);  //'-'
+    	int iMax = getIndexMaxLastLine();
+    	for(int i = _cols-2; i >= iMax; i--){ //_cols-2 == g.size() - 1
+        	alignG.insertFirst(g.getByteAtIndex(i));
         }
+    	alignF.addEndOffset(_cols-1 - iMax );  //'-'
     }
     public void fillAlignF(int index){
-
-        if(index > 0){
-            while (index-1 > -1){
-            	 alignG.addFirst(f.getByteAtIndex(index-1));
-                 alignF.addFirst((byte) 0);  // '-'
+    	alignG.addStartOffset(index); 
+        while (index > 0){
+            	 alignF.insertFirst(f.getByteAtIndex(index-1));
                  index--;
             }
-        }
+        
     }
+    /*
     public void fillAlignG(int index){
 
         if(index > 0){
@@ -149,52 +151,125 @@ public class SemiGlobAlignment {
             }
         }
     }
+    */
     public void generateAlignment(){  //f->g
 
         startAlign();
 
-        int i = getIndexMaxLastCol();
-        int j = height-1;
+        int j = getIndexMaxLastLine();
+        int i = _lines-1;
 
         while (i > 0 && j > 0){
-            int fIndex = i -1;
-            int gIndex = j -1;
+            int fIndex = i;
+            int gIndex = j;
             if(diagMatch(i, j)){
-            	alignG.addFirst(f.getByteAtIndex(fIndex));
-            	alignF.addFirst(g.getByteAtIndex(gIndex));
+            	alignF.insertFirst(f.getByteAtIndex(fIndex-1));
+            	alignG.insertFirst(g.getByteAtIndex(gIndex-1));
                 i--;
                 j--;
             }
             else if(upMatch(i, j)){
-            	alignG.addFirst(f.getByteAtIndex(fIndex));
-            	alignF.addFirst((byte) 0);
+            	alignF.insertFirst(f.getByteAtIndex(fIndex-1));
+            	alignG.insertFirst((byte) 0);
                 i--;
             }
             else if(leftMatch(i, j)){
-            	alignG.addFirst((byte) 0);
-            	alignF.addFirst(g.getByteAtIndex(gIndex));
+            	alignF.insertFirst((byte) 0);
+            	alignG.insertFirst(g.getByteAtIndex(gIndex-1));
                 j--;
             }
         }
-        if (i>0)
-        	fillAlignF(i);
-        else
-        	fillAlignG(j);
+        
+        fillAlignF(i);
+  
+        //fillAlignG(j);
     }
     /**
-     * the score of the global alignment from f to g
+     * the score of the global alignment from f to g :if f is not included to g 
+     * -1 else
      * @return
      */
-    public int getScore() {
-    	//System.out.println(matrix[0].length);
-    	return matrix[getIndexMaxLastCol()][height-1];
+    public int getFGScore() {
+    	int indexMax = getIndexMaxLastLine();
+    	if (indexMax == 0) // pas de preffixe commun
+    		return 0;
+    	else if(fIncludedInG(new Cell(_lines - 1, indexMax)))
+    		return -1;
+    	else
+    		//System.out.println(matrix[0].length);
+    		return matrix[_lines-1][indexMax];
+    	
     }
+    
     /**
-     * the score of the global alignment from g to f
+     * tests the inclusion of the alignment f going up the starting cell to the end cell
+     * @param cell starting cell of the alignment reconstruction
+     * @return true if f is included in g, false else
+     */
+    private boolean fIncludedInG(Cell cell) {
+		return getLastCell(cell).line > 0;
+	}
+    
+    /**
+     * tests the inclusion of the alignment g going up the starting cell to the end cell
+     * @param cell starting cell of the alignment reconstruction
+     * @return true if g is included in f, false else
+     */
+    private boolean gIncludedInF(Cell cell) {
+    	return getLastCell(cell).col > 0;
+    }
+
+	/**
+     * the score of the global alignment from g to f : if g is not included to f 
+     * -1 else
      * @return
      */
     public int getScoreTransposed() {
-    	return matrix[width-1][getIndexMaxLastLine()];
+    	int indexMax = getIndexMaxLastCol();
+    	if (indexMax == 0)
+    		return 0;
+    	else if(gIncludedInF(new Cell(indexMax, _cols - 1)))
+    		return -1;
+    	else
+    	return matrix[getIndexMaxLastCol()][_cols-1];
+    }
+    
+    /**
+     * goes up the alignment to the final cell
+     * @param beginCell starting cell of the alignment reconstruction
+     * @return final cell of alignment reconstruction
+     */
+    public Cell getLastCell(Cell beginCell ) {
+    	Cell beginCel = new Cell(beginCell.line,beginCell.col);
+    	
+    	while (beginCel.line >= 1 && beginCel.col >= 1) {
+    		if(diagMatch(beginCel.line, beginCel.col))
+    			beginCel.setIndex(beginCel.line - 1, beginCel.col - 1);
+    		else if(upMatch(beginCel.line, beginCel.col))
+    			beginCel.setIndex(beginCel.line - 1, beginCel.col);
+    		else {
+    			beginCel.setIndex(beginCel.line, beginCel.col - 1);
+			}
+    			
+    	}
+    	return beginCel;
+    }
+    /**
+     * A class that represents a cell of the semi-global alignment matrix
+     *
+     */
+    private class Cell{
+    	private int line;
+    	private int col;
+    	
+    	private Cell(int line,int col) {
+    		this.line = line;
+    		this.col = col;
+    	}
+    	private void setIndex(int i, int j) {
+    		line = i;
+    		col = j;
+    	}
     }
     	
 }
