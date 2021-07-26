@@ -27,12 +27,12 @@ public class AlignmentTest {
     @Test
     public void maxLastColTest(){
         assertEquals(10, alignment.getIndexMaxLastCol());
-        assertEquals(3, alignment.matrix[10][8]);
+        assertEquals(3, alignment.getMatrix()[10][8]);
     }
     @Test
     public void alignTest(){
         alignment.generateAlignment();
-        assertEquals("CAGCA-CTTGGATTCTCGG", alignment.alignF.toString());
-        assertEquals("---CAGCGTGG--------", alignment.alignG.toString());
+        assertEquals("cagcacttggattctcgg-----", alignment.alignF.toString());
+        assertEquals("---------------cagcgtgg", alignment.alignG.toString());
     }
 }

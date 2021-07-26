@@ -17,7 +17,7 @@ public class SemiGlobAlignment {
      */
     private int _lines;
 
-    public short[][] matrix;
+    private short[][] matrix;
 
     private final short GAP = -2;
     private final short MATCH = 1;
@@ -140,18 +140,15 @@ public class SemiGlobAlignment {
             }
         
     }
-    /*
+    
     public void fillAlignG(int index){
-
-        if(index > 0){
-            while (index-1 > -1){
-            	 alignF.addFirst(g.getByteAtIndex(index-1));
-                 alignG.addFirst((byte) 0);  // '-'
+    	alignF.addStartOffset(index);
+    	while (index > 0){
+    		alignG.insertFirst(g.getByteAtIndex(index-1));
                  index--;
             }
-        }
     }
-    */
+    
     public void generateAlignment(){  //f->g
 
         startAlign();
@@ -182,7 +179,7 @@ public class SemiGlobAlignment {
         
         fillAlignF(i);
   
-        //fillAlignG(j);
+        fillAlignG(j);
     }
     /**
      * the score of the global alignment from f to g :if f is not included to g 
@@ -191,7 +188,7 @@ public class SemiGlobAlignment {
      */
     public int getFGScore() {
     	int indexMax = getIndexMaxLastLine();
-    	if (indexMax == 0) // pas de preffixe commun
+    	if (indexMax == 0) // pas de prefixe commun
     		return 0;
     	else if(fIncludedInG(new Cell(_lines - 1, indexMax)))
     		return -1;
@@ -207,7 +204,7 @@ public class SemiGlobAlignment {
      * @return true if f is included in g, false else
      */
     private boolean fIncludedInG(Cell cell) {
-		return getLastCell(cell).line > 0;
+		return getLastCell(cell).line == 0;
 	}
     
     /**
@@ -216,7 +213,7 @@ public class SemiGlobAlignment {
      * @return true if g is included in f, false else
      */
     private boolean gIncludedInF(Cell cell) {
-    	return getLastCell(cell).col > 0;
+    	return getLastCell(cell).col == 0;
     }
 
 	/**
@@ -271,5 +268,19 @@ public class SemiGlobAlignment {
     		col = j;
     	}
     }
-    	
+    
+    
+    // test 
+    
+    public void displayMatrix() {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+              System.out.printf("%2d \t",matrix[i][j]);
+            }
+            System.out.println();
+          }
+    }
+	public short[][] getMatrix() {
+		return matrix;
+	}
 }

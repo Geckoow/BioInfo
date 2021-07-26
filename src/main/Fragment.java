@@ -65,7 +65,7 @@ public class Fragment {
             case 'c':
                 return 2;
             case 'g':
-                return -2;
+                return -2;            
             default:
                 throw new IllegalArgumentException();
         }

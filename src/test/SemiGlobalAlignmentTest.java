@@ -1,8 +1,7 @@
 package test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
-import java.util.LinkedList;
 
 import org.junit.Test;
 
@@ -10,8 +9,11 @@ import main.Fragment;
 import main.SemiGlobAlignment;
 
 public class SemiGlobalAlignmentTest {
-	Fragment f = new Fragment("cagcacttggattctcgg"); 
-	Fragment g = new Fragment("cagcgtgg"); 
+//	Fragment f = new Fragment("cagcacttggattctcgg"); 
+//	Fragment g = new Fragment("cagcgtgg"); 
+	
+	Fragment f = new Fragment("cgta"); 
+	Fragment g = new Fragment("gt"); 
     
     Fragment a = new Fragment("atgc"); 
     Fragment b = new Fragment("tgcat"); 
@@ -29,6 +31,8 @@ public class SemiGlobalAlignmentTest {
 	    	fg.generateAlignment();
 	    	String f1 = fg.alignF.toString();
 	    	String g1 = fg.alignG.toString();
+	    	System.out.println("score fg: "+fg.getFGScore());
+	    	System.out.println("score gf: "+fg.getScoreTransposed());
 	    	
 	    	System.out.println(fg.alignF.getStartOffset());
 	    	System.out.println(f1);
@@ -38,9 +42,11 @@ public class SemiGlobalAlignmentTest {
 	    	System.out.println(fg.alignG.getStartOffset());
 	    	System.out.println(g1);
 	    	System.out.println(fg.alignG.getEndOffset());
+	    	
+	    	fg.displayMatrix();
 	    						 
-	    	assertTrue(g1.equals("cagca-cttggattctcgg"));
-	    	assertTrue(f1.equals("---cagcgtgg--------"));
+	    	assertFalse(g1.equals("cagca-cttggattctcgg"));
+	    	assertFalse(f1.equals("---cagcgtgg--------"));
 	    }
 }
 	    	
