@@ -3,8 +3,6 @@ package main;
 import java.util.ArrayList;
 import java.util.concurrent.PriorityBlockingQueue;
 
-import sun.jvm.hotspot.opto.MachReturnNode;
-
 public class OverlapGraph {
 	
 	/**
@@ -15,18 +13,19 @@ public class OverlapGraph {
 	 * list of the fragments
 	 */
     private ArrayList<Fragment> fragments;
-   
+    /**
+     * list qui gère les inclusion tel que listInclusion[i] = -1 s il n y a pas d'inclusion de fragment
+     * listInclusion[i] = j si le ième fragment inclus dans le jième
+     */
     private ArrayList<Integer> listInclusion ;
     
     
     public OverlapGraph(ArrayList<Fragment> fragList){ 
         fragments = fragList;
         edges = new PriorityBlockingQueue<Edge>();
-        listInclusion = new ArrayList<Integer>(fragList.size());
-        initListInclusion();
-        
-        int listSize = fragList.size();
-        
+        listInclusion = new ArrayList<Integer>();
+        initListInclusion(fragList.size());
+        int listSize = fragList.size();     
         for (int i = 0; i < listSize; i++) {
         	for (int j = i+1; j < listSize; j++) {
         		generateArc(i,j);
@@ -42,9 +41,18 @@ public class OverlapGraph {
     	Fragment f = fragments.get(startP);
     	Fragment g = fragments.get(endP);
     	
-    
+    	if((listInclusion.get(startP)!= -1 && f.getSize() < g.getSize()) || (listInclusion.get(endP) != -1 && f.getSize() > g.getSize()))
+    			return;
+    	
     	SemiGlobAlignment sgaFG = new SemiGlobAlignment(f, g);
     	SemiGlobAlignment sgaFpG = new SemiGlobAlignment(f, g.getComplementaryInverse());
+    	
+    	if(isIncluded(sgaFG, sgaFpG, f, g, startP, endP))
+    		return;
+    //	System.out.println(sgaFG.getFGScore());
+    //	System.out.println(sgaFG.getScoreTransposed());
+    //	System.out.println(sgaFpG.getFGScore());
+    //	System.out.println(sgaFpG.getScoreTransposed());
     	/* weight(f->g) = weight(g'->f')*/
     	edges.add(new Edge(startP,endP,sgaFG.getFGScore(),EdgeType.FG));
     	edges.add(new Edge(endP,startP,sgaFG.getFGScore(),EdgeType.GpFp));
@@ -59,19 +67,20 @@ public class OverlapGraph {
     	edges.add(new Edge(startP,endP,sgaFpG.getFGScore(),EdgeType.FGp));
     }
     
-    private void initListInclusion() {
-    	for(int i = 0; i < listInclusion.size(); i++) {
+    private void initListInclusion(int size) {
+    	for(int i = 0; i < size; i++) {
     		listInclusion.add(-1);
     	}
     }
     
-    public boolean manageInclusion(SemiGlobAlignment sgaFG, SemiGlobAlignment sgaFpG, Fragment f, Fragment g, int posF, int posG) {
+    public boolean isIncluded(SemiGlobAlignment sgaFG, SemiGlobAlignment sgaFpG, Fragment f, Fragment g, int posF, int posG) {
     	if(sgaFpG.getScoreTransposed() == -1 || sgaFpG.getFGScore() == -1  || sgaFG.getScoreTransposed() == -1 || sgaFG.getFGScore() == -1 ) {
     		if(f.getSize() < g.getSize())
-    			listInclusion.add(posF, posG);
+    			listInclusion.set(posF, posG);
     		else {
-    			listInclusion.add(posG, posF);
+    			listInclusion.set(posG, posF);
 			}
+    		System.out.println("inclu");
     		return true;
     	}
     	return false;
@@ -81,5 +90,11 @@ public class OverlapGraph {
     public PriorityBlockingQueue<Edge> getEdges() {
     	return new PriorityBlockingQueue<Edge> (edges);
     }
+	public ArrayList<Integer> getListInclusion() {
+		return listInclusion;
+	}
+	public ArrayList<Fragment> getFragments() {
+		return fragments;
+	}
 }
 

@@ -179,7 +179,7 @@ public class SemiGlobAlignment {
         
         fillAlignF(i);
   
-        fillAlignG(j);
+      //  fillAlignG(j);
     }
     /**
      * the score of the global alignment from f to g :if f is not included to g 
@@ -190,8 +190,8 @@ public class SemiGlobAlignment {
     	int indexMax = getIndexMaxLastLine();
     	if (indexMax == 0) // pas de prefixe commun
     		return 0;
-    	else if(fIncludedInG(new Cell(_lines - 1, indexMax)))
-    		return -1;
+    	//else if(fIncludedInG(new Cell(_lines - 1, indexMax)))
+    	//	return -1;
     	else
     		//System.out.println(matrix[0].length);
     		return matrix[_lines-1][indexMax];
@@ -225,10 +225,10 @@ public class SemiGlobAlignment {
     	int indexMax = getIndexMaxLastCol();
     	if (indexMax == 0)
     		return 0;
-    	else if(gIncludedInF(new Cell(indexMax, _cols - 1)))
-    		return -1;
+    	//else if(gIncludedInF(new Cell(indexMax, _cols - 1)))
+    	//	return -1;
     	else
-    	return matrix[getIndexMaxLastCol()][_cols-1];
+    		return matrix[getIndexMaxLastCol()][_cols-1];
     }
     
     /**

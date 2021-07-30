@@ -89,6 +89,10 @@ public class LinkedFragment {
 	public int size() {
 		return startOffset+innerList.size()+endOffset;
 	}
+	
+	public int reelSize() {
+		return startOffset+innerList.size();
+	}
 	@Override
 	public String toString() {
 		Fragment frag = new Fragment(this);

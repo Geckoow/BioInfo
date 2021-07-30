@@ -176,6 +176,6 @@ public class Fragment {
 
 	public void setComplementaryInverse(boolean isComplementaryInverse) {
 		this.isComplementaryInverse = isComplementaryInverse;
-	}
+	}	
     
 }

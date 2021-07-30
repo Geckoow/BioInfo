@@ -7,19 +7,10 @@ public class Main {
     public static void main(String[] args){
     	
     	FileManager rd= new FileManager ();
-        rd.parse(new File("Collections/10000/collection1.fasta"));
+        rd.parse(new File("Collections/3/collection1.fasta"));
         int n = rd.getFragments().size();
         System.out.println("nombre de fragments: "+n);
- 	 /*   Fragment a = new Fragment("TACGA".toLowerCase());//0
-    	Fragment b = new Fragment("ACCC".toLowerCase());//1
-    	Fragment c = new Fragment("CTAAAG".toLowerCase());//2
-    	Fragment d = new Fragment("GACA".toLowerCase());//3
-    	ArrayList<Fragment> frag = new ArrayList<Fragment>();
-    	frag.add(a);
-    	frag.add(b);
-    	frag.add(c);
-    	frag.add(d);
-       */ 
+
     	System.out.println("start overlapGraph");
     	OverlapGraph graph = new OverlapGraph(rd.getFragments());
     	PriorityBlockingQueue<Edge> edges = graph.getEdges();
@@ -33,10 +24,13 @@ public class Main {
         System.out.println("end overlapGraph");
         
     	System.out.println("start Hamilton");
-    	//System.out.println(graph.getEdges().size());
-    	HamiltonPath h = new HamiltonPath(graph.getEdges(),n);
-    	 System.out.print("arcs:" +h.getHalmitonPath().size());
-    	System.out.println(h.getHalmitonPath());
+    	
+    	System.out.println(graph.getEdges().size());
+    	
+    	HamiltonPath h = new HamiltonPath(graph,n);
+    	
+    	System.out.println("arcs:" +h.getHalmitonPath().size());
+    	h.displayPath();
     	System.out.println("end Hamilton");
     	 
  
