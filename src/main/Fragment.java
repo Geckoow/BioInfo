@@ -28,7 +28,8 @@ public class Fragment {
     public Fragment(byte[] l){
         this.list = l;
     }
-
+    
+    public Fragment() {}
  
     public Fragment(String s){
     	list = new byte[s.length()];
@@ -177,5 +178,9 @@ public class Fragment {
 	public void setComplementaryInverse(boolean isComplementaryInverse) {
 		this.isComplementaryInverse = isComplementaryInverse;
 	}	
+	
+	public void insertByte(int pos, byte val) {
+		list[pos] = val;
+	}
     
 }

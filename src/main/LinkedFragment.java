@@ -29,6 +29,10 @@ public class LinkedFragment {
     	
     }
     
+    public LinkedFragment(LinkedList<Byte> l) {
+    	this.innerList = l;
+    	
+    }
     /**
      * insert a byte at the start of the fragment
      * @param b
@@ -85,11 +89,17 @@ public class LinkedFragment {
 	public LinkedList<Byte> getInnerList() {
 		return innerList;
 	}
-	
+	/**
+	 * size of fragment with start and end Gaps
+	 * return startOffset + length of fragment + end Gaps
+	 */
 	public int size() {
 		return startOffset+innerList.size()+endOffset;
 	}
-	
+	/**
+	 * size of fragment without endGaps
+	 * return startOffset + length of fragment
+	 */
 	public int reelSize() {
 		return startOffset+innerList.size();
 	}

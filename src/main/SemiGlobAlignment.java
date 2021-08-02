@@ -4,6 +4,7 @@ package main;
 public class SemiGlobAlignment {
     private final Fragment f;
     private final Fragment g;
+    
     public final LinkedFragment alignG;
     public final LinkedFragment alignF;
   
@@ -138,7 +139,6 @@ public class SemiGlobAlignment {
             	 alignF.insertFirst(f.getByteAtIndex(index-1));
                  index--;
             }
-        
     }
     
     public void fillAlignG(int index){
@@ -188,13 +188,13 @@ public class SemiGlobAlignment {
      */
     public int getFGScore() {
     	int indexMax = getIndexMaxLastLine();
-    	if (indexMax == 0) // pas de prefixe commun
-    		return 0;
-    	//else if(fIncludedInG(new Cell(_lines - 1, indexMax)))
-    	//	return -1;
+    	if (indexMax == 0)  //no common prefix. f ---
+    		return 0;                         //g    ---       
+    	else if(fIncludedInG(new Cell(_lines - 1, indexMax)))//f   ------ 
+    		return -1;										 //g ---------- 
     	else
-    		//System.out.println(matrix[0].length);
-    		return matrix[_lines-1][indexMax];
+    		return matrix[_lines-1][indexMax];     //f   ------ 
+    											   //g      ------
     	
     }
     
@@ -225,8 +225,8 @@ public class SemiGlobAlignment {
     	int indexMax = getIndexMaxLastCol();
     	if (indexMax == 0)
     		return 0;
-    	//else if(gIncludedInF(new Cell(indexMax, _cols - 1)))
-    	//	return -1;
+    	else if(gIncludedInF(new Cell(indexMax, _cols - 1)))
+    		return -1;
     	else
     		return matrix[getIndexMaxLastCol()][_cols-1];
     }
@@ -247,7 +247,6 @@ public class SemiGlobAlignment {
     		else {
     			beginCel.setIndex(beginCel.line, beginCel.col - 1);
 			}
-    			
     	}
     	return beginCel;
     }
@@ -270,7 +269,7 @@ public class SemiGlobAlignment {
     }
     
     
-    // test 
+    //use for test 
     
     public void displayMatrix() {
         for (int i = 0; i < matrix.length; i++) {

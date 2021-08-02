@@ -1,9 +1,18 @@
 >fragment 1, collection 1
-gcc
+gcctcagtcc
 >fragment 2, collection 1
-tgcat
+tgcataggat
 >fragment 3, collection 1
-atgc
+atgctctcgt
 >fragment 4, collection 1
-ttatgc
-
+ttatgcatta
+>fragment 5, collection 1
+ggatttttag
+>fragment 6, collection 1
+caatatcgcg
+>fragment 7, collection 1
+cggtatccga
+>fragment 8, collection 1
+tgcatgcatt
+>fragment 9, collection 1
+acgatgcatc

@@ -30,6 +30,7 @@ public class Main {
     	HamiltonPath h = new HamiltonPath(graph,n);
     	
     	System.out.println("arcs:" +h.getHalmitonPath().size());
+    	System.out.println("begin index "+h.getBeginPath()); 
     	h.displayPath();
     	System.out.println("end Hamilton");
     	 

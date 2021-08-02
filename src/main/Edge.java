@@ -19,7 +19,7 @@ public class Edge implements Comparable<Edge>{
      * type of the arc
      */
     private EdgeType type;
-    private static int MAXCOLLECTIONS = 100000;
+
     /**
      * Constructor of the Edge
      * @param index of the source node
@@ -42,19 +42,25 @@ public class Edge implements Comparable<Edge>{
 	public int getEndP() {
 		return endP;
 	}
-
+	/*
+	 * the score of this Edge
+	 */
 	public int getWeight() {
 		return weight;
 	}
 	
 	/**
-	 * for ranking by decreasing weight
+	 * for ranking by decreasing weight and ascending order for the position
 	 */
 	@Override
 	public int compareTo(Edge o) {
+		if(o.getWeight() != getWeight())		
+			return (o.getWeight() - getWeight()) ;
+		else if(startP != o.startP)
+			return startP - o.startP;
+		else 
+			return endP - o.endP;
 		
-		return (o.getWeight() - getWeight())*MAXCOLLECTIONS + (startP - o.startP)*10 +(endP - o.endP);
-		//si egalité de poid? (startP - o.startP)*10 + (endP - o.endP);
 	}
 	
 	public boolean equals(final Edge o) {

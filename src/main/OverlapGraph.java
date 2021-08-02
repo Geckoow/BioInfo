@@ -6,7 +6,7 @@ import java.util.concurrent.PriorityBlockingQueue;
 public class OverlapGraph {
 	
 	/**
-	 * list of the Edges
+	 * list of the Edges represented by a priority queue, in order to store the arcs according to a priority
 	 */
 	private PriorityBlockingQueue<Edge> edges;
 	/**
@@ -23,9 +23,12 @@ public class OverlapGraph {
     public OverlapGraph(ArrayList<Fragment> fragList){ 
         fragments = fragList;
         edges = new PriorityBlockingQueue<Edge>();
+        
         listInclusion = new ArrayList<Integer>();
         initListInclusion(fragList.size());
-        int listSize = fragList.size();     
+        
+        int listSize = fragList.size();  
+        
         for (int i = 0; i < listSize; i++) {
         	for (int j = i+1; j < listSize; j++) {
         		generateArc(i,j);
@@ -41,8 +44,8 @@ public class OverlapGraph {
     	Fragment f = fragments.get(startP);
     	Fragment g = fragments.get(endP);
     	
-    	if((listInclusion.get(startP)!= -1 && f.getSize() < g.getSize()) || (listInclusion.get(endP) != -1 && f.getSize() > g.getSize()))
-    			return;
+    	if(listInclusion.get(startP) != -1 || listInclusion.get(endP) != -1 )
+    		return;
     	
     	SemiGlobAlignment sgaFG = new SemiGlobAlignment(f, g);
     	SemiGlobAlignment sgaFpG = new SemiGlobAlignment(f, g.getComplementaryInverse());
@@ -59,6 +62,7 @@ public class OverlapGraph {
     	/* weight(g->f) = weight(f'->g')*/
     	edges.add(new Edge(startP,endP,sgaFG.getScoreTransposed(),EdgeType.FpGp));
     	edges.add(new Edge(endP,startP,sgaFG.getScoreTransposed(),EdgeType.GF));
+    	
     	/* weight(g'->f) = weight(f'->g)*/
     	edges.add(new Edge(endP,startP,sgaFpG.getScoreTransposed(),EdgeType.GpF));
     	edges.add(new Edge(startP,endP,sgaFpG.getScoreTransposed(),EdgeType.FpG));
@@ -79,7 +83,7 @@ public class OverlapGraph {
     			listInclusion.set(posF, posG);
     		else {
     			listInclusion.set(posG, posF);
-			}
+			}//tmp
     		System.out.println("inclu");
     		return true;
     	}
