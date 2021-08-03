@@ -14,8 +14,8 @@ public class OverlapGraph {
 	 */
     private ArrayList<Fragment> fragments;
     /**
-     * list qui gère les inclusion tel que listInclusion[i] = -1 s il n y a pas d'inclusion de fragment
-     * listInclusion[i] = j si le ième fragment inclus dans le jième
+     * list qui gï¿½re les inclusion tel que listInclusion[i] = -1 s il n y a pas d'inclusion de fragment
+     * listInclusion[i] = j si le iï¿½me fragment inclus dans le jiï¿½me
      */
     private ArrayList<Integer> listInclusion ;
     
@@ -84,7 +84,7 @@ public class OverlapGraph {
     		else {
     			listInclusion.set(posG, posF);
 			}//tmp
-    		System.out.println("inclu");
+    		//System.out.println("inclu");
     		return true;
     	}
     	return false;
