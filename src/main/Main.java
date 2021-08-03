@@ -7,7 +7,7 @@ import java.util.concurrent.PriorityBlockingQueue;
 public class Main {
     public static void main(String[] args){
     	FileManager rd= new FileManager ();
-        rd.parse(new File("Collections/10000/collection1.fasta"));
+        rd.parse(new File("Collections/100000/collection2.fasta"));
         int n = rd.getFragments().size();
         System.out.println("nombre de fragments: "+n);
 

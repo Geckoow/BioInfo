@@ -5,14 +5,18 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class Consensus {
-
+    private short[] tab;
     /**
      * Constructor
      */
     public Consensus(){
-
+        tab = new short[]{0, 0, 0, 0, 0};
     }
-
+    public void resetArray(short[] array){
+        for(int i = 0; i < array.length; i++){
+            array[i] = 0;
+        }
+    }
     /**
      * Return byte based on array index
      * @param index array index
@@ -79,7 +83,7 @@ public class Consensus {
      * @return the byte who appear the most at index for all the fragments in lfrag
      */
     public byte maxCol(ArrayList<LinkedFragment> lfrag, short index){
-        short[] tab = {0, 0, 0, 0, 0};
+        resetArray(tab);
         for (int i = 0;i < lfrag.size(); i++){
             LinkedFragment frag = lfrag.get(i);
             if(index-frag.getStartOffset() >= 0 && index < frag.size()-frag.getEndOffset()){
