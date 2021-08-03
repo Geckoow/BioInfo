@@ -1,13 +1,13 @@
 package main;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.concurrent.PriorityBlockingQueue;
 
 public class Main {
     public static void main(String[] args){
-    	
     	FileManager rd= new FileManager ();
-        rd.parse(new File("Collections/3/collection1.fasta"));
+        rd.parse(new File("Collections/10000/collection1.fasta"));
         int n = rd.getFragments().size();
         System.out.println("nombre de fragments: "+n);
 
@@ -34,14 +34,25 @@ public class Main {
     	h.displayPath();
     	System.out.println("end Hamilton");
     	 
- 
+ 		ManageGaps manager = new ManageGaps(rd);
+
+		ArrayList<LinkedFragment> multAlign = manager.manageGaps(h);
+		for(int i = 0; i < multAlign.size(); i++){
+			System.out.println(multAlign.get(i));
+		}
+
+		Consensus consensus = new Consensus();
+		LinkedFragment finalFrag = consensus.consensusVote(multAlign);
+		System.out.println(finalFrag);
+		//ConsensusSequence consensus = new ConsensusSequence(multAlign);
+		//consensus.vote();
  /*
     	
       //  Fragment ff = new Fragment("CAGCACTTGGATTCTCGG".toLowerCase());
      //  Fragment f = new Fragment("CAGCGTGG".toLowerCase());
        
 
-        
+
 
         SemiGlobAlignment alignment = new SemiGlobAlignment(d, a);
         int q = alignment.getIndexMaxLastCol();
