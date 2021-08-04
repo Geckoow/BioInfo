@@ -8,6 +8,7 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
+import main.Consensus;
 import main.ConsensusSequence;
 import main.Fragment;
 import main.LinkedFragment;
@@ -33,6 +34,10 @@ public class ConsensusSequenceTest {
 		l.add(lf);
 		
 		ConsensusSequence c = new ConsensusSequence(l);
+		Consensus cc = new Consensus();
+		LinkedFragment finalFrag = cc.consensusVote(l);
+		System.out.println(finalFrag);
+		
 		Fragment fragment = c.vote();
 		
 		assertEquals("atgcatgcc",fragment.toString());

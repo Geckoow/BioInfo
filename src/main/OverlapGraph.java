@@ -52,10 +52,6 @@ public class OverlapGraph {
     	
     	if(isIncluded(sgaFG, sgaFpG, f, g, startP, endP))
     		return;
-    //	System.out.println(sgaFG.getFGScore());
-    //	System.out.println(sgaFG.getScoreTransposed());
-    //	System.out.println(sgaFpG.getFGScore());
-    //	System.out.println(sgaFpG.getScoreTransposed());
     	/* weight(f->g) = weight(g'->f')*/
     	edges.add(new Edge(startP,endP,sgaFG.getFGScore(),EdgeType.FG));
     	edges.add(new Edge(endP,startP,sgaFG.getFGScore(),EdgeType.GpFp));
@@ -83,8 +79,7 @@ public class OverlapGraph {
     			listInclusion.set(posF, posG);
     		else {
     			listInclusion.set(posG, posF);
-			}//tmp
-    		//System.out.println("inclu");
+			}
     		return true;
     	}
     	return false;

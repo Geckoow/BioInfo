@@ -1,8 +1,6 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 public class Consensus {
     private short[] tab;
@@ -10,7 +8,7 @@ public class Consensus {
      * Constructor
      */
     public Consensus(){
-        tab = new short[]{0, 0, 0, 0, 0};
+        tab = new short[]{ 0, 0, 0, 0};
     }
     public void resetArray(short[] array){
         for(int i = 0; i < array.length; i++){
@@ -25,17 +23,15 @@ public class Consensus {
     public byte indexToByte(short index){
         switch (index) {
             case 0:
-                return (byte) 0;
-            case 1:
                 return (byte) 1;
-            case 2:
+            case 1:
                 return (byte) -1;
-            case 3:
+            case 2:
                 return (byte) 2;
-            case 4:
+            case 3:
                 return (byte) -2;
         }
-        return (byte) 0;
+        throw new IllegalArgumentException(Integer.toString(index));
     }
 
     /**
@@ -45,18 +41,16 @@ public class Consensus {
      */
     public short byteToIndex(byte b){
         switch (b) {
-            case (byte) 0:
-                return 0;
             case (byte) 1:
-                return 1;
+                return 0;
             case (byte) -1:
-                return 2;
+                return 1;
             case (byte) 2:
-                return 3;
+                return 2;
             case (byte) -2:
-                return 4;
+                return 3;
         }
-        return (byte) 0;
+        throw new IllegalArgumentException(Byte.toString(b));
     }
 
     /**
@@ -68,7 +62,7 @@ public class Consensus {
         short maxIte = array[0];
         short indexMaxIte = 0;
         for(short i = 1; i < array.length; i++){
-            if(array[i] >= maxIte){
+            if(array[i] > maxIte){
                 maxIte = array[i];
                 indexMaxIte = i;
             }
@@ -87,8 +81,10 @@ public class Consensus {
         for (int i = 0;i < lfrag.size(); i++){
             LinkedFragment frag = lfrag.get(i);
             if(index-frag.getStartOffset() >= 0 && index < frag.size()-frag.getEndOffset()){
-                short tabIndex = byteToIndex(frag.getInnerList().get(index-frag.getStartOffset()));
-                tab[tabIndex] += 1;
+            	Byte b = frag.getInnerList().get(index-frag.getStartOffset());
+            	if(b != 0) {
+            		short tabIndex = byteToIndex(b);
+            		tab[tabIndex] += 1;}
             }
         }
         return maxIteration(tab);

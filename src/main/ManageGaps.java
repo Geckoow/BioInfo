@@ -24,14 +24,6 @@ public class ManageGaps {
 		this.fragments = fm.getFragments();
 		lFragments = new ArrayList<LinkedFragment>();
 	}
-	/**
-	 * construit les fragments avec une meme taille
-	 * @param path hamilton path
-	 */
-	public void buildFragments(HamiltonPath path) {
-		Edge e = path.getHalmitonPath().get(path.getBeginPath());
-		LinkedFragment [] fg = edgeToFragment(e);
-	}
 
 	/**
 	 * Function who returned list of fragments based on an edge(corresponding to starting/ending node of the edge)
@@ -63,13 +55,13 @@ public class ManageGaps {
 		}
 		//On fait attention à modifier f/g en fonction du type d'arc
 		if(e.getType().equals(EdgeType.FpG) || e.getType().equals(EdgeType.FpGp))
-			f = f.getComplementaryInverse();
+			f = fragments.get(e.getStartP()).getComplementaryInverse();
 		if(e.getType().equals(EdgeType.GpF) || e.getType().equals(EdgeType.GpFp))
-			f = g.getComplementaryInverse();
+			f = fragments.get(e.getStartP()).getComplementaryInverse();
 		if(e.getType().equals(EdgeType.FGp) || e.getType().equals(EdgeType.FpGp))
-			g = g.getComplementaryInverse();
+			g = fragments.get(e.getEndP()).getComplementaryInverse();
 		if(e.getType().equals(EdgeType.GFp) || e.getType().equals(EdgeType.GpFp))
-			g = f.getComplementaryInverse();
+			g = fragments.get(e.getEndP()).getComplementaryInverse();
 
 		SemiGlobAlignment sg = new SemiGlobAlignment(f, g);
 		sg.generateAlignment();

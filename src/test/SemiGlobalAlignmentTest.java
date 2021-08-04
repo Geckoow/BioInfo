@@ -12,14 +12,14 @@ public class SemiGlobalAlignmentTest {
 //	Fragment f = new Fragment("cagcacttggattctcgg"); 
 //	Fragment g = new Fragment("cagcgtgg"); 
 	
-	Fragment f = new Fragment("atgc"); 
-	Fragment g = new Fragment("gcc"); 
+	Fragment f = new Fragment("ctaaaaatcc"); 
+	Fragment g = new Fragment("ttatgcatta"); 
     
     Fragment a = new Fragment("atgc"); 
     Fragment b = new Fragment("tgcat"); 
     Fragment c = new Fragment("gcc"); 
     
-    SemiGlobAlignment fg = new SemiGlobAlignment(g,f);
+    SemiGlobAlignment fg = new SemiGlobAlignment(f,g);
 	SemiGlobAlignment ab = new SemiGlobAlignment(a,b);
 	SemiGlobAlignment bc = new SemiGlobAlignment(b,c);
 
