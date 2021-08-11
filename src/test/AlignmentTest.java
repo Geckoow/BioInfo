@@ -20,7 +20,7 @@ public class AlignmentTest {
         alignment = new SemiGlobAlignment(f, g);
     }
 
-    @Test
+    /*@Test
     public void testMatrix(){
 
     }
@@ -34,5 +34,5 @@ public class AlignmentTest {
         alignment.generateAlignment();
         assertEquals("cagcacttggattctcgg-----", alignment.alignF.toString());
         assertEquals("---------------cagcgtgg", alignment.alignG.toString());
-    }
+    }*/
 }

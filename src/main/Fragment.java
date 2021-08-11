@@ -8,23 +8,6 @@ public class Fragment {
 	 */
     private byte[] list;
     
-
-    /**
-     * true if this fragment is the inverse fragment of another
-     */
-    private boolean isInverse = false;
-     /**
-      * true if this fragment is the complementary fragment of another
-      */
-    private boolean isComplementary = false;
-    /**
-     *  true if this fragment is the complementary and inverse fragment of another
-     */
-    private boolean isComplementaryInverse = false;
-
-
-    
-    
     public Fragment(byte[] l){
         this.list = l;
     }
@@ -152,35 +135,4 @@ public class Fragment {
         }
         return frag;
     }
-
-	public boolean isInverse() {
-		return isInverse;
-	}
-
-	public void setInverse(boolean isInverse) {
-		this.isInverse = isInverse;
-	}
-
-	public boolean isComplementary() {
-		return isComplementary;
-	}
-
-	public void setComplementary(boolean isComplementary) {
-		this.isComplementary = isComplementary;
-	}
-
-	
-
-	public boolean isComplementaryInverse() {
-		return isComplementaryInverse;
-	}
-
-	public void setComplementaryInverse(boolean isComplementaryInverse) {
-		this.isComplementaryInverse = isComplementaryInverse;
-	}	
-	
-	public void insertByte(int pos, byte val) {
-		list[pos] = val;
-	}
-    
 }
