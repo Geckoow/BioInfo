@@ -21,7 +21,7 @@ public class LinkedFragment {
     private int endOffset = 0;
     
     
-    /*
+    /**
      * initialization constructor
      */
     public LinkedFragment() {

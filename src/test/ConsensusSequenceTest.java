@@ -1,7 +1,5 @@
 package test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -9,7 +7,6 @@ import java.util.LinkedList;
 import org.junit.Test;
 
 import main.Consensus;
-import main.ConsensusSequence;
 import main.Fragment;
 import main.LinkedFragment;
 
@@ -33,27 +30,14 @@ public class ConsensusSequenceTest {
 		lf.addStartOffset(6);
 		l.add(lf);
 		
-		ConsensusSequence c = new ConsensusSequence(l);
 		Consensus cc = new Consensus();
-		LinkedFragment finalFrag = cc.consensusVote(l);
+		Fragment finalFrag = cc.consensusVote(l);
 		System.out.println(finalFrag);
-		
-		Fragment fragment = c.vote();
-		
-		assertEquals("atgcatgcc",fragment.toString());
+
 	}
 	
 	@Test
-	public void voteTest1() {
-		l.add(new LinkedFragment(stringToByte("atgc-----")));
-		l.add(new LinkedFragment(stringToByte("-tgatt---")));
-		l.add(new LinkedFragment(stringToByte("--gctt---")));
-		l.add(new LinkedFragment(stringToByte("------gcc")));
-		ConsensusSequence c = new ConsensusSequence(l);
-		Fragment fragment = c.vote();
-		assertNotEquals("atgcatgcc",fragment.toString());
-		assertEquals("atgcttgcc",fragment.toString());
-	}
+
 	
 	public LinkedList<Byte> stringToByte(String s){
 		LinkedList<Byte> linkedList = new LinkedList<Byte>();

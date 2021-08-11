@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 
-import javax.sound.midi.VoiceStatus;
 
 
 public class HamiltonPath {
@@ -68,7 +67,6 @@ public class HamiltonPath {
     		if(isAddedArc(listInclusion,uFind,e,in,out)) {
     			
     			halmitonPath.put(e1, e);
-    		//	sumWeight += e.getWeight();
     			in[e2] = getInOut(e,false);
     			out[e1] = getInOut(e,true);
     			if(uFind.union(e1, e2)) {
@@ -98,7 +96,7 @@ public class HamiltonPath {
 			if(out[e1] == 0  &&  in[e2] == 0) {
 				/*
 				 * on regarde aussi si le complementaire inverse n'a pas deja ete utilise pour la source et la destination
-				 * c'est à dire : 1) g'->y dans ce cas on ne peut plus prendre le fragment g
+				 * c'est ï¿½ dire : 1) g'->y dans ce cas on ne peut plus prendre le fragment g
 				 * 				  2) x->f' dans ce cas on ne peut plus prendre le fragment f
 				 *       g'->y
 				 *    f->g

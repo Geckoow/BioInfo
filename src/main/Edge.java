@@ -22,8 +22,8 @@ public class Edge implements Comparable<Edge>{
 
     /**
      * Constructor of the Edge
-     * @param index of the source node
-     * @param index of the destination node
+     * @param startP of the source node
+     * @param endP of the destination node
      * @param weight weight of this Edge
      * @param type Edge type
      */

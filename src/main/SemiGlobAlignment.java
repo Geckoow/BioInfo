@@ -179,7 +179,6 @@ public class SemiGlobAlignment {
         
         fillAlignF(i);
   
-      //  fillAlignG(j);
     }
     /**
      * the score of the global alignment from f to g :if f is not included to g 

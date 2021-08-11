@@ -76,7 +76,7 @@ public class Consensus {
      * @param index index
      * @return the byte who appear the most at index for all the fragments in lfrag
      */
-    public byte maxCol(ArrayList<LinkedFragment> lfrag, short index){
+    public byte maxCol(ArrayList<LinkedFragment> lfrag, int index){
         resetArray(tab);
         for (int i = 0;i < lfrag.size(); i++){
             LinkedFragment frag = lfrag.get(i);
@@ -95,13 +95,14 @@ public class Consensus {
      * @param fragList List of linked fragments
      * @return the fragment obtained by a consensus vote over fraglist
      */
-    public LinkedFragment consensusVote(ArrayList<LinkedFragment> fragList){
-        LinkedFragment finalFrag = new LinkedFragment();
+    public Fragment consensusVote(ArrayList<LinkedFragment> fragList){
         int index = fragList.get(0).size();
-        for(short i = 0; i < index; i++){
+        byte[] list = new byte[index];
+        for(int i = 0; i < index; i++){
             byte consensus = maxCol(fragList, i);
-            finalFrag.insertLast(consensus);
+            list[i] = consensus;
         }
+        Fragment finalFrag = new Fragment(list);
         return finalFrag;
     }
 }
